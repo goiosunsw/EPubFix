@@ -82,7 +82,12 @@ class epub_file:
         for htf,xi in it:
             root = xi.getroot()
             ptags=root.findall('.//*'+self.html_namespace+'p')
-            print '\n'.join([pt.text for pt in ptags if pt.text is not None])
+            for pt in ptags:
+                try:
+                    if pt.text is not None:
+                        print pt.text
+                except UnicodeEncodeError as e:
+                    print '****' + str(e) 
         
     def strip_html_tags(self, file):
         pass
@@ -122,7 +127,7 @@ class epub_file:
                 try:
                     if re.findall('\s*'+str(num)+'\s*', tag.text):
                         tag.text=re.sub('\s*'+str(num)+'\s*','',tag.text)
-                        print 'Erased page number '+str(num)
+                        # print 'Erased page number '+str(num)
                     
                 except TypeError:
                     pass
